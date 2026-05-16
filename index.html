@@ -248,15 +248,15 @@ nav .nav-links a:hover { color: var(--text); }
   <div class="modal">
     <h3>上传文件</h3>
     <div class="form-group">
-      <label>选择文件（单文件 ≤ 20MB，总大小建议 &lt; 80MB）</label>
+      <label>选择文件（可多选，单文件 ≤ 20MB）</label>
       <div class="file-upload-zone" id="fileUploadZone" onclick="document.getElementById('fileInput').click()">
         <div class="upload-placeholder">
           <div class="upload-icon">📤</div>
-          <div class="upload-text">点击选择文件</div>
+          <div class="upload-text">点击选择文件（可多选）</div>
         </div>
         <div class="file-name" id="selectedFileName" style="display:none"></div>
       </div>
-      <input type="file" id="fileInput" onchange="handleFileSelect(event)">
+      <input type="file" id="fileInput" onchange="handleFileSelect(event)" multiple>
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline btn-sm" onclick="closeFileModal()">取消</button>
@@ -277,8 +277,8 @@ let folders = [];
 let files = [];   // {id, folderId, name, type, size, createdAt} — no data field
 let currentFolderId = null;
 let serverSnapshot = null;
-let pendingFileData = null;
-let pendingFileName = null;
+let pendingFiles = []; // {data, name}
+
 
 // --- File type icons ---
 const FT = {
@@ -503,7 +503,7 @@ function deleteFolder(id) {
 
 // --- File CRUD ---
 function openUploadFile() {
-  pendingFileData = null; pendingFileName = null;
+  pendingFiles = [];
   document.getElementById('fileInput').value = '';
   document.getElementById('selectedFileName').style.display = 'none';
   document.getElementById('fileUploadZone').classList.remove('has-file');
@@ -511,46 +511,57 @@ function openUploadFile() {
   document.getElementById('uploadBtn').disabled = true;
   document.getElementById('fileModal').classList.add('active');
 }
-function closeFileModal() { document.getElementById('fileModal').classList.remove('active'); pendingFileData = null; }
+function closeFileModal() { document.getElementById('fileModal').classList.remove('active'); pendingFiles = []; }
 
 function handleFileSelect(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 20 * 1024 * 1024) {
-    showToast('单个文件不能超过 20MB');
+  const selected = Array.from(e.target.files);
+  if (!selected.length) return;
+  // Check sizes
+  const tooBig = selected.filter(f => f.size > 20 * 1024 * 1024);
+  if (tooBig.length) {
+    showToast(tooBig.length + ' 个文件超过 20MB 限制：' + tooBig.map(f=>f.name).join(', '));
     e.target.value = ''; return;
   }
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    pendingFileData = ev.target.result;
-    pendingFileName = file.name;
-    document.getElementById('selectedFileName').textContent = file.name + ' (' + fmtSize(file.size) + ')';
-    document.getElementById('selectedFileName').style.display = '';
-    document.getElementById('fileUploadZone').querySelector('.upload-placeholder').style.display = 'none';
-    document.getElementById('fileUploadZone').classList.add('has-file');
-    document.getElementById('uploadBtn').disabled = false;
-  };
-  reader.readAsDataURL(file);
+  // Read all files
+  pendingFiles = [];
+  let loaded = 0;
+  selected.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      pendingFiles.push({data: ev.target.result, name: file.name, size: file.size});
+      loaded++;
+      if (loaded === selected.length) {
+        // All loaded
+        const total = pendingFiles.reduce((s,f)=>s+f.size, 0);
+        document.getElementById('selectedFileName').textContent = selected.length + ' 个文件 (' + fmtSize(total) + ')';
+        document.getElementById('selectedFileName').style.display = '';
+        document.getElementById('fileUploadZone').querySelector('.upload-placeholder').style.display = 'none';
+        document.getElementById('fileUploadZone').classList.add('has-file');
+        document.getElementById('uploadBtn').disabled = false;
+      }
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 function uploadFile() {
-  if (!pendingFileData || !pendingFileName) return;
-  const id = 'fl_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  // Store file content in separate localStorage key
-  localStorage.setItem(FILE_PREFIX + id, pendingFileData);
-  // Store metadata
-  files.push({
-    id,
-    folderId: currentFolderId,
-    name: pendingFileName,
-    type: pendingFileName.split('.').pop().toLowerCase(),
-    size: Math.round(pendingFileData.length * 0.75), // base64 → approximate binary size
-    createdAt: Date.now()
+  if (!pendingFiles.length) return;
+  pendingFiles.forEach(pf => {
+    const id = 'fl_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    localStorage.setItem(FILE_PREFIX + id, pf.data);
+    files.push({
+      id,
+      folderId: currentFolderId,
+      name: pf.name,
+      type: pf.name.split('.').pop().toLowerCase(),
+      size: Math.round(pf.data.length * 0.75),
+      createdAt: Date.now()
+    });
   });
   saveMeta();
   renderItems();
   closeFileModal();
-  showToast('文件已上传（草稿）');
+  showToast(pendingFiles.length + ' 个文件已上传（草稿）');
 }
 
 function deleteFile(id) {
