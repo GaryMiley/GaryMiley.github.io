@@ -214,6 +214,7 @@ nav .nav-links a:hover { color: var(--text); }
   <div class="publish-banner" id="publishBanner">
     <span class="banner-text">你有未发布的修改</span>
     <button class="btn btn-warning btn-sm" onclick="exportData()">导出</button>
+    <button class="btn btn-outline btn-sm" onclick="discardDraft()">清除草稿</button>
   </div>
 
   <div class="publish-steps" id="publishSteps">
@@ -663,6 +664,17 @@ function esc(s) {
   const d = document.createElement('div');
   d.textContent = s;
   return d.innerHTML;
+}
+
+function discardDraft() {
+  if (!confirm('确定清除所有草稿，加载服务器版本？')) return;
+  for (let i = localStorage.length - 1; i >= 0; i--) {
+    const key = localStorage.key(i);
+    if (key && (key.startsWith(FILE_PREFIX) || key === META_KEY)) {
+      localStorage.removeItem(key);
+    }
+  }
+  location.reload();
 }
 
 function showToast(msg) {
