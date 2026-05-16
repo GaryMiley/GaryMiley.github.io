@@ -38,47 +38,38 @@ nav {
 }
 nav .logo { font-size: 1.1rem; font-weight: 700; color: var(--text); text-decoration: none; }
 nav .nav-links { display: flex; gap: 20px; list-style: none; }
-nav .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: .85rem; transition: color .2s; }
+nav .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: .85rem; }
 nav .nav-links a:hover { color: var(--text); }
 
-/* Hero */
-.hero {
-  text-align: center; padding: 64px 24px 32px;
-}
+.hero { text-align: center; padding: 56px 24px 24px; }
 .hero .avatar {
-  width: 80px; height: 80px; border-radius: 50%;
+  width: 72px; height: 72px; border-radius: 50%;
   background: linear-gradient(135deg, #2563eb, #7c3aed);
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 2rem; color: #fff; margin-bottom: 16px;
-  box-shadow: 0 6px 20px rgba(37,99,235,.25);
+  font-size: 1.75rem; color: #fff; margin-bottom: 14px;
 }
-.hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -.02em; }
-.hero p { color: var(--text-secondary); font-size: .95rem; }
+.hero h1 { font-size: 1.75rem; font-weight: 800; margin-bottom: 2px; }
+.hero p { color: var(--text-secondary); font-size: .9rem; }
 
-/* Container */
-.container { max-width: 1040px; margin: 0 auto; padding: 0 24px 64px; }
+.container { max-width: 1040px; margin: 0 auto; padding: 0 24px 56px; }
 
 /* Toolbar */
 .toolbar {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
 }
-.toolbar .breadcrumb {
-  display: flex; align-items: center; gap: 6px; font-size: .9rem; flex-wrap: wrap;
-}
-.toolbar .breadcrumb a {
-  color: var(--accent); text-decoration: none; cursor: pointer;
-}
-.toolbar .breadcrumb a:hover { text-decoration: underline; }
-.toolbar .breadcrumb span { color: var(--text-secondary); }
+.breadcrumb { display: flex; align-items: center; gap: 4px; font-size: .875rem; flex-wrap: wrap; }
+.breadcrumb a { color: var(--accent); text-decoration: none; cursor: pointer; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span { color: var(--text-secondary); }
 .toolbar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* Buttons */
 .btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 8px 16px; border: none; border-radius: 7px;
-  font-size: .825rem; font-weight: 500; cursor: pointer;
-  transition: all .15s; text-decoration: none; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 8px 15px; border: none; border-radius: 7px;
+  font-size: .8rem; font-weight: 500; cursor: pointer;
+  transition: all .15s; white-space: nowrap;
 }
 .btn-primary { background: var(--accent); color: #fff; }
 .btn-primary:hover { background: var(--accent-hover); }
@@ -89,7 +80,8 @@ nav .nav-links a:hover { color: var(--text); }
 .btn-warning { background: #f59e0b; color: #fff; }
 .btn-warning:hover { background: #d97706; }
 .btn-sm { padding: 5px 10px; font-size: .75rem; }
-.btn-xs { padding: 3px 8px; font-size: .7rem; border-radius: 5px; }
+.btn-xs { padding: 3px 7px; font-size: .7rem; border-radius: 5px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
 
 /* Grid */
 .items-grid {
@@ -98,36 +90,50 @@ nav .nav-links a:hover { color: var(--text); }
   gap: 14px;
 }
 
-/* Folder & File cards */
 .item-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .15s;
-  position: relative;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 16px;
+  text-align: center; cursor: pointer; transition: all .15s;
+  position: relative; word-break: break-all;
 }
 .item-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
 .item-card .item-icon { font-size: 2.5rem; margin-bottom: 10px; line-height: 1; }
 .item-card .item-name {
-  font-size: .825rem; font-weight: 500; word-break: break-all;
+  font-size: .8rem; font-weight: 500;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .item-card .item-meta { font-size: .7rem; color: var(--text-secondary); margin-top: 4px; }
 .item-card .item-actions {
-  position: absolute; top: 6px; right: 6px;
-  display: flex; gap: 4px; opacity: 0; transition: opacity .15s;
+  position: absolute; top: 4px; right: 4px;
+  display: flex; gap: 3px; opacity: 0; transition: opacity .15s;
 }
 .item-card:hover .item-actions { opacity: 1; }
 
-/* Empty state */
 .empty-state {
-  grid-column: 1/-1; text-align: center; padding: 48px 16px; color: var(--text-secondary);
+  grid-column: 1/-1; text-align: center; padding: 44px 16px; color: var(--text-secondary);
 }
-.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
-.empty-state h3 { font-size: 1.1rem; margin-bottom: 4px; color: var(--text); }
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 10px; }
+.empty-state h3 { font-size: 1.05rem; margin-bottom: 4px; color: var(--text); }
+
+/* Banner */
+.publish-banner {
+  display: none; background: #fef3c7; border: 1px solid #f59e0b;
+  border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px;
+  align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.publish-banner.show { display: flex; }
+.publish-banner .banner-text { font-size: .8rem; color: #92400e; font-weight: 500; }
+
+.publish-steps {
+  display: none; background: #f0fdf4; border: 1px solid #22c55e;
+  border-radius: var(--radius); padding: 16px; margin-bottom: 16px;
+}
+.publish-steps.show { display: block; }
+.publish-steps h4 { font-size: .875rem; color: #166534; margin-bottom: 8px; }
+.publish-steps ol { margin-left: 16px; color: #166534; font-size: .78rem; line-height: 2; }
+.publish-steps code {
+  background: #dcfce7; padding: 1px 5px; border-radius: 3px; font-size: .75rem; color: #15803d;
+}
 
 /* Modal */
 .modal-overlay {
@@ -138,62 +144,45 @@ nav .nav-links a:hover { color: var(--text); }
 .modal-overlay.active { display: flex; }
 .modal {
   background: var(--card-bg); border-radius: var(--radius);
-  width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto;
-  box-shadow: var(--shadow-lg); padding: 28px;
+  width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg); padding: 26px;
 }
-.modal h3 { font-size: 1.1rem; margin-bottom: 20px; }
-.form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: .825rem; font-weight: 500; margin-bottom: 5px; }
+.modal h3 { font-size: 1.05rem; margin-bottom: 18px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: .8rem; font-weight: 500; margin-bottom: 5px; }
 .form-group input {
   width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px;
-  font-size: .875rem; font-family: inherit; outline: none; transition: border-color .15s;
+  font-size: .85rem; font-family: inherit; outline: none; transition: border-color .15s;
 }
 .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
 
 .file-upload-zone {
   border: 2px dashed var(--border); border-radius: var(--radius);
-  padding: 24px; text-align: center; cursor: pointer; transition: all .15s;
+  padding: 22px; text-align: center; cursor: pointer; transition: all .15s;
 }
 .file-upload-zone:hover { border-color: var(--accent); background: #fafbff; }
-.file-upload-zone .upload-icon { font-size: 2rem; margin-bottom: 6px; }
-.file-upload-zone .upload-text { font-size: .8rem; color: var(--text-secondary); }
+.file-upload-zone .upload-icon { font-size: 1.75rem; margin-bottom: 4px; }
+.file-upload-zone .upload-text { font-size: .78rem; color: var(--text-secondary); }
 .file-upload-zone.has-file { border-style: solid; border-color: #22c55e; background: #f0fdf4; }
-.file-upload-zone .file-name { font-size: .85rem; color: #15803d; font-weight: 500; }
+.file-upload-zone .file-name { font-size: .82rem; color: #15803d; font-weight: 500; }
 .file-upload-zone input[type="file"] { display: none; }
 
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
 
-/* Banner */
-.publish-banner {
-  display: none; background: #fef3c7; border: 1px solid #f59e0b;
-  border-radius: var(--radius); padding: 14px 18px; margin-bottom: 20px;
-  align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
-}
-.publish-banner.show { display: flex; }
-.publish-banner .banner-text { font-size: .825rem; color: #92400e; font-weight: 500; }
-
-.publish-steps {
-  display: none; background: #f0fdf4; border: 1px solid #22c55e;
-  border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
-}
-.publish-steps.show { display: block; }
-.publish-steps h4 { font-size: .9rem; color: #166534; margin-bottom: 10px; }
-.publish-steps ol { margin-left: 18px; color: #166534; font-size: .8rem; line-height: 2; }
-.publish-steps code {
-  background: #dcfce7; padding: 1px 5px; border-radius: 3px; font-size: .775rem; color: #15803d;
-}
-
-/* Toast */
 .toast {
   position: fixed; bottom: 20px; right: 20px; z-index: 300;
-  background: #1a1a1a; color: #fff; padding: 10px 20px;
-  border-radius: 7px; font-size: .825rem;
+  background: #1a1a1a; color: #fff; padding: 10px 18px;
+  border-radius: 7px; font-size: .8rem;
   transform: translateY(100px); opacity: 0; transition: all .25s;
 }
 .toast.show { transform: translateY(0); opacity: 1; }
 
+.total-size { font-size: .75rem; color: var(--text-secondary); margin-bottom: 12px; }
+.total-size.warn { color: #f59e0b; font-weight: 500; }
+.total-size.danger { color: #ef4444; font-weight: 500; }
+
 @media (max-width: 640px) {
-  .hero h1 { font-size: 1.5rem; }
+  .hero h1 { font-size: 1.4rem; }
   .items-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 }
 </style>
@@ -202,9 +191,7 @@ nav .nav-links a:hover { color: var(--text); }
 
 <nav>
   <a href="#" class="logo">czg</a>
-  <ul class="nav-links">
-    <li><a href="#files">文件</a></li>
-  </ul>
+  <ul class="nav-links"><li><a href="#files">文件</a></li></ul>
 </nav>
 
 <section class="hero">
@@ -217,6 +204,7 @@ nav .nav-links a:hover { color: var(--text); }
   <div class="toolbar">
     <div class="breadcrumb" id="breadcrumb"></div>
     <div class="actions">
+      <span class="total-size" id="totalSize"></span>
       <button class="btn btn-outline btn-sm" id="exportBtn" onclick="exportData()" style="display:none">导出 data.json</button>
       <button class="btn btn-outline btn-sm" onclick="openCreateFolder()">+ 新建文件夹</button>
       <button class="btn btn-primary btn-sm" onclick="openUploadFile()">+ 上传文件</button>
@@ -225,15 +213,15 @@ nav .nav-links a:hover { color: var(--text); }
 
   <div class="publish-banner" id="publishBanner">
     <span class="banner-text">你有未发布的修改</span>
-    <button class="btn btn-warning btn-sm" onclick="exportData()">导出 data.json</button>
+    <button class="btn btn-warning btn-sm" onclick="exportData()">导出</button>
   </div>
 
   <div class="publish-steps" id="publishSteps">
     <h4>发布步骤</h4>
     <ol>
-      <li>将下载的 <code>data.json</code> 放到项目目录覆盖原文件</li>
-      <li>终端运行：<code>git add data.json && git commit -m "update" && git push</code></li>
-      <li>等待 1-2 分钟刷新网页</li>
+      <li>把下载的所有文件放到项目目录（<code>data.json</code> 放根目录，其余文件放到 <code>files/</code> 文件夹）</li>
+      <li>终端运行：<code>git add -A && git commit -m "update" && git push</code></li>
+      <li>等 1-2 分钟刷新网页</li>
     </ol>
   </div>
 
@@ -246,7 +234,7 @@ nav .nav-links a:hover { color: var(--text); }
     <h3>新建文件夹</h3>
     <div class="form-group">
       <label>文件夹名称</label>
-      <input type="text" id="folderName" placeholder="输入文件夹名称">
+      <input type="text" id="folderName" placeholder="输入名称">
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline btn-sm" onclick="closeFolderModal()">取消</button>
@@ -258,9 +246,9 @@ nav .nav-links a:hover { color: var(--text); }
 <!-- Upload File Modal -->
 <div class="modal-overlay" id="fileModal">
   <div class="modal">
-    <h3 id="fileModalTitle">上传文件</h3>
+    <h3>上传文件</h3>
     <div class="form-group">
-      <label>选择文件</label>
+      <label>选择文件（单文件 ≤ 20MB，总大小建议 &lt; 80MB）</label>
       <div class="file-upload-zone" id="fileUploadZone" onclick="document.getElementById('fileInput').click()">
         <div class="upload-placeholder">
           <div class="upload-icon">📤</div>
@@ -280,169 +268,191 @@ nav .nav-links a:hover { color: var(--text); }
 <div class="toast" id="toast"></div>
 
 <script>
-// --- Data model ---
-// folders: [{ id, name, createdAt }]
-// files:   [{ id, folderId, name, type, size, data, createdAt }]
-// currentFolderId: null = root
-
-const DRAFT_KEY = 'fs_draft';
-const SNAPSHOT_KEY = 'fs_snapshot';
+// Storage keys
+const META_KEY = 'fs_meta';   // {folders, files} — metadata, no base64
+const FILE_PREFIX = 'fs_blob_'; // fs_blob_{id} = base64 file content
+const SNAP_KEY = 'fs_snapshot';
 
 let folders = [];
-let files = [];
+let files = [];   // {id, folderId, name, type, size, createdAt} — no data field
 let currentFolderId = null;
 let serverSnapshot = null;
-let pendingFile = null;
+let pendingFileData = null;
+let pendingFileName = null;
+
+// --- File type icons ---
+const FT = {
+  pdf:{icon:'📕',label:'PDF'}, doc:{icon:'📝',label:'Word'}, docx:{icon:'📝',label:'Word'},
+  xls:{icon:'📊',label:'Excel'}, xlsx:{icon:'📊',label:'Excel'},
+  ppt:{icon:'📽️',label:'PPT'}, pptx:{icon:'📽️',label:'PPT'},
+  jpg:{icon:'🖼️',label:'图片'}, jpeg:{icon:'🖼️',label:'图片'}, png:{icon:'🖼️',label:'图片'},
+  gif:{icon:'🖼️',label:'图片'}, webp:{icon:'🖼️',label:'图片'}, svg:{icon:'🖼️',label:'图片'},
+  txt:{icon:'📄',label:'文本'}, md:{icon:'📄',label:'文本'},
+  zip:{icon:'📦',label:'压缩包'}, rar:{icon:'📦',label:'压缩包'}, '7z':{icon:'📦',label:'压缩包'},
+  mp3:{icon:'🎵',label:'音频'}, wav:{icon:'🎵',label:'音频'},
+  mp4:{icon:'🎬',label:'视频'},
+  cpp:{icon:'💻',label:'代码'}, c:{icon:'💻',label:'代码'}, py:{icon:'💻',label:'代码'},
+  js:{icon:'💻',label:'代码'}, html:{icon:'💻',label:'代码'}, css:{icon:'💻',label:'代码'},
+  java:{icon:'💻',label:'代码'},
+};
+
+function getFileInfo(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  return FT[ext] || {icon:'📁',label:ext.toUpperCase()||'文件'};
+}
+
+function fmtSize(bytes) {
+  if (!bytes) return '';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+function totalDraftSize() {
+  let total = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith(FILE_PREFIX)) {
+      total += localStorage.getItem(key).length * 2; // UTF-16 chars ≈ 2 bytes each
+    }
+  }
+  return total;
+}
 
 // --- Persistence ---
 function isDirty() {
-  const draft = localStorage.getItem(DRAFT_KEY);
-  if (!draft) return false;
-  return draft !== (serverSnapshot || '[]');
+  const meta = localStorage.getItem(META_KEY);
+  if (!meta) return false;
+  return meta !== (serverSnapshot || '{}');
 }
 
 function updateBanner() {
   const dirty = isDirty();
   document.getElementById('publishBanner').classList.toggle('show', dirty);
   document.getElementById('exportBtn').style.display = dirty ? '' : 'none';
+
+  const total = totalDraftSize();
+  const el = document.getElementById('totalSize');
+  if (total > 80 * 1024 * 1024) {
+    el.textContent = '⚠ 草稿 ' + fmtSize(total) + '（过大！）';
+    el.className = 'total-size danger';
+  } else if (total > 40 * 1024 * 1024) {
+    el.textContent = '草稿 ' + fmtSize(total);
+    el.className = 'total-size warn';
+  } else if (total > 0) {
+    el.textContent = '草稿 ' + fmtSize(total);
+    el.className = 'total-size';
+  } else {
+    el.textContent = '';
+    el.className = 'total-size';
+  }
 }
 
-function saveDraft() {
-  localStorage.setItem(DRAFT_KEY, JSON.stringify({ folders, files }));
+function saveMeta() {
+  localStorage.setItem(META_KEY, JSON.stringify({folders, files}));
   updateBanner();
 }
 
 async function loadData() {
-  let server = { folders: [], files: [] };
+  // Load server metadata
+  let server = {folders:[], files:[]};
   try {
     const resp = await fetch('data.json?' + Date.now());
     if (resp.ok) {
       const json = await resp.json();
-      if (json && typeof json === 'object') {
-        server = { folders: json.folders || [], files: json.files || [] };
-      }
+      server = {folders: json.folders || [], files: json.files || []};
     }
-  } catch (e) {}
+  } catch(e) {}
 
   serverSnapshot = JSON.stringify(server);
-  const draft = localStorage.getItem(DRAFT_KEY);
 
-  if (draft && draft !== serverSnapshot) {
+  // Check local draft
+  const draftMeta = localStorage.getItem(META_KEY);
+  if (draftMeta && draftMeta !== serverSnapshot) {
     try {
-      const d = JSON.parse(draft);
+      const d = JSON.parse(draftMeta);
       folders = d.folders || [];
       files = d.files || [];
-    } catch (e) {
-      folders = server.folders;
-      files = server.files;
-    }
-  } else {
-    folders = server.folders;
-    files = server.files;
-    if (draft === serverSnapshot) localStorage.removeItem(DRAFT_KEY);
+      return;
+    } catch(e) {}
   }
-}
 
-// --- File type helpers ---
-const FILE_TYPES = {
-  pdf:  { icon: '📕', label: 'PDF', color: '#ef4444' },
-  doc:  { icon: '📝', label: 'Word', color: '#2563eb' },
-  docx: { icon: '📝', label: 'Word', color: '#2563eb' },
-  xls:  { icon: '📊', label: 'Excel', color: '#22c55e' },
-  xlsx: { icon: '📊', label: 'Excel', color: '#22c55e' },
-  ppt:  { icon: '📽️', label: 'PPT', color: '#f97316' },
-  pptx: { icon: '📽️', label: 'PPT', color: '#f97316' },
-  jpg:  { icon: '🖼️', label: '图片', color: '#8b5cf6' },
-  jpeg: { icon: '🖼️', label: '图片', color: '#8b5cf6' },
-  png:  { icon: '🖼️', label: '图片', color: '#8b5cf6' },
-  gif:  { icon: '🖼️', label: '图片', color: '#8b5cf6' },
-  webp: { icon: '🖼️', label: '图片', color: '#8b5cf6' },
-  svg:  { icon: '🖼️', label: '图片', color: '#8b5cf6' },
-  txt:  { icon: '📄', label: '文本', color: '#6b7280' },
-  md:   { icon: '📄', label: 'Markdown', color: '#6b7280' },
-  zip:  { icon: '📦', label: '压缩包', color: '#a16207' },
-  rar:  { icon: '📦', label: '压缩包', color: '#a16207' },
-  '7z': { icon: '📦', label: '压缩包', color: '#a16207' },
-  mp3:  { icon: '🎵', label: '音频', color: '#ec4899' },
-  wav:  { icon: '🎵', label: '音频', color: '#ec4899' },
-  mp4:  { icon: '🎬', label: '视频', color: '#14b8a6' },
-  cpp:  { icon: '💻', label: '代码', color: '#2563eb' },
-  c:    { icon: '💻', label: '代码', color: '#2563eb' },
-  py:   { icon: '💻', label: '代码', color: '#2563eb' },
-  js:   { icon: '💻', label: '代码', color: '#2563eb' },
-  html: { icon: '💻', label: '代码', color: '#2563eb' },
-  css:  { icon: '💻', label: '代码', color: '#2563eb' },
-  java: { icon: '💻', label: '代码', color: '#2563eb' },
-};
+  // No draft or draft matches server — use server data, clear stale blobs
+  folders = server.folders;
+  files = [];
+  const serverIds = new Set();
+  for (const f of server.files) {
+    serverIds.add(f.id);
+    if (f.data && !localStorage.getItem(FILE_PREFIX + f.id)) {
+      localStorage.setItem(FILE_PREFIX + f.id, f.data);
+    }
+    const {data: _, ...meta} = f;
+    files.push(meta);
+  }
+  serverSnapshot = JSON.stringify({folders, files});
 
-function getFileInfo(name) {
-  const ext = name.split('.').pop().toLowerCase();
-  return FILE_TYPES[ext] || { icon: '📁', label: ext.toUpperCase() || '文件', color: '#6b7280' };
-}
-
-function formatSize(bytes) {
-  if (!bytes || bytes === 0) return '';
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-  return (bytes / 1048576).toFixed(1) + ' MB';
+  if (draftMeta === serverSnapshot) {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(FILE_PREFIX)) {
+        const id = key.slice(FILE_PREFIX.length);
+        if (serverIds.has(id)) localStorage.removeItem(key);
+      }
+    }
+    localStorage.removeItem(META_KEY);
+  }
 }
 
 // --- Rendering ---
 function renderBreadcrumb() {
   const bc = document.getElementById('breadcrumb');
-  let trail = [{ id: null, name: '全部文件' }];
+  let trail = [{id:null, name:'全部文件'}];
   if (currentFolderId) {
-    const folder = folders.find(f => f.id === currentFolderId);
-    if (folder) trail.push({ id: folder.id, name: folder.name });
+    const f = folders.find(x => x.id === currentFolderId);
+    if (f) trail.push({id:f.id, name:f.name});
   }
-  bc.innerHTML = trail.map((t, i) => {
-    if (i < trail.length - 1) {
-      return `<a onclick="navigateTo(${t.id ? "'" + t.id + "'" : 'null'})">${escapeHtml(t.name)}</a><span>/</span>`;
-    }
-    return `<span>${escapeHtml(t.name)}</span>`;
-  }).join('');
+  bc.innerHTML = trail.map((t,i) =>
+    i < trail.length-1
+      ? `<a onclick="navigateTo(${t.id?"'"+t.id+"'":"null"})">${esc(t.name)}</a><span>/</span>`
+      : `<span>${esc(t.name)}</span>`
+  ).join('');
 }
 
 function renderItems() {
   renderBreadcrumb();
   const grid = document.getElementById('itemsGrid');
 
-  const subFolders = folders.filter(f => !f.parentId && currentFolderId === null || f.parentId === currentFolderId);
+  const subFolders = folders.filter(f =>
+    (f.parentId || null) === (currentFolderId || null)
+  );
   const subFiles = files.filter(f => f.folderId === currentFolderId);
 
-  if (subFolders.length === 0 && subFiles.length === 0) {
+  if (!subFolders.length && !subFiles.length) {
     grid.innerHTML = `<div class="empty-state"><div class="empty-icon">📂</div><h3>空文件夹</h3><p>上传文件或新建文件夹</p></div>`;
     return;
   }
 
   let html = '';
 
-  // Folders first
   subFolders.forEach(f => {
-    const fileCount = files.filter(x => x.folderId === f.id).length;
-    html += `
-      <div class="item-card" onclick="navigateTo('${f.id}')">
-        <div class="item-actions">
-          <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFolder('${f.id}')" title="删除">✕</button>
-        </div>
-        <div class="item-icon">📁</div>
-        <div class="item-name">${escapeHtml(f.name)}</div>
-        <div class="item-meta">${fileCount} 个文件</div>
-      </div>`;
+    const count = files.filter(x => x.folderId === f.id).length;
+    html += `<div class="item-card" onclick="navigateTo('${f.id}')">
+      <div class="item-actions"><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFolder('${f.id}')">✕</button></div>
+      <div class="item-icon">📁</div>
+      <div class="item-name">${esc(f.name)}</div>
+      <div class="item-meta">${count} 个文件</div>
+    </div>`;
   });
 
-  // Files
   subFiles.forEach(f => {
     const info = getFileInfo(f.name);
-    html += `
-      <div class="item-card" onclick="downloadFile('${f.id}')">
-        <div class="item-actions">
-          <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFile('${f.id}')" title="删除">✕</button>
-        </div>
-        <div class="item-icon">${info.icon}</div>
-        <div class="item-name">${escapeHtml(f.name)}</div>
-        <div class="item-meta">${formatSize(f.size)}</div>
-      </div>`;
+    const hasLocal = !!localStorage.getItem(FILE_PREFIX + f.id);
+    html += `<div class="item-card" onclick="downloadFile('${f.id}')">
+      <div class="item-actions"><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFile('${f.id}')">✕</button></div>
+      <div class="item-icon">${info.icon}</div>
+      <div class="item-name">${esc(f.name)}</div>
+      <div class="item-meta">${fmtSize(f.size)}${hasLocal ? ' · 草稿' : ''}</div>
+    </div>`;
   });
 
   grid.innerHTML = html;
@@ -452,7 +462,7 @@ function renderItems() {
 function navigateTo(folderId) {
   currentFolderId = folderId;
   renderItems();
-  document.getElementById('files').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('files').scrollIntoView({behavior:'smooth'});
 }
 
 // --- Folder CRUD ---
@@ -461,21 +471,16 @@ function openCreateFolder() {
   document.getElementById('folderModal').classList.add('active');
   setTimeout(() => document.getElementById('folderName').focus(), 100);
 }
-
-function closeFolderModal() {
-  document.getElementById('folderModal').classList.remove('active');
-}
+function closeFolderModal() { document.getElementById('folderModal').classList.remove('active'); }
 
 function createFolder() {
   const name = document.getElementById('folderName').value.trim();
   if (!name) { showToast('请输入文件夹名称'); return; }
   folders.push({
-    id: 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-    name,
-    parentId: currentFolderId,
-    createdAt: Date.now()
+    id: 'f_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    name, parentId: currentFolderId || undefined, createdAt: Date.now()
   });
-  saveDraft();
+  saveMeta();
   renderItems();
   closeFolderModal();
   showToast('文件夹已创建（草稿）');
@@ -483,20 +488,22 @@ function createFolder() {
 
 function deleteFolder(id) {
   if (!confirm('删除文件夹会同时删除其中的文件，确定？')) return;
-  folders = folders.filter(f => f.id !== id);
-  // Also delete files in subfolders
-  const subFolderIds = folders.filter(f => f.parentId === id).map(f => f.id);
-  const allIds = [id, ...subFolderIds];
-  files = files.filter(f => !allIds.includes(f.folderId));
-  folders = folders.filter(f => !allIds.includes(f.parentId) || !allIds.includes(f.id));
-  saveDraft();
+  const collect = [id];
+  for (let i = 0; i < collect.length; i++) {
+    folders.filter(f => f.parentId === collect[i]).forEach(f => collect.push(f.id));
+  }
+  const fileIds = files.filter(f => collect.includes(f.folderId)).map(f => f.id);
+  fileIds.forEach(fid => localStorage.removeItem(FILE_PREFIX + fid));
+  files = files.filter(f => !collect.includes(f.folderId));
+  folders = folders.filter(f => !collect.includes(f.id) && !collect.includes(f.parentId));
+  saveMeta();
   renderItems();
   showToast('已删除（草稿）');
 }
 
 // --- File CRUD ---
 function openUploadFile() {
-  pendingFile = null;
+  pendingFileData = null; pendingFileName = null;
   document.getElementById('fileInput').value = '';
   document.getElementById('selectedFileName').style.display = 'none';
   document.getElementById('fileUploadZone').classList.remove('has-file');
@@ -504,29 +511,20 @@ function openUploadFile() {
   document.getElementById('uploadBtn').disabled = true;
   document.getElementById('fileModal').classList.add('active');
 }
-
-function closeFileModal() {
-  document.getElementById('fileModal').classList.remove('active');
-  pendingFile = null;
-}
+function closeFileModal() { document.getElementById('fileModal').classList.remove('active'); pendingFileData = null; }
 
 function handleFileSelect(e) {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 20 * 1024 * 1024) {
-    showToast('文件不能超过 20MB');
-    e.target.value = '';
-    return;
+    showToast('单个文件不能超过 20MB');
+    e.target.value = ''; return;
   }
   const reader = new FileReader();
   reader.onload = function(ev) {
-    pendingFile = {
-      name: file.name,
-      size: file.size,
-      type: file.name.split('.').pop().toLowerCase(),
-      data: ev.target.result
-    };
-    document.getElementById('selectedFileName').textContent = file.name + ' (' + formatSize(file.size) + ')';
+    pendingFileData = ev.target.result;
+    pendingFileName = file.name;
+    document.getElementById('selectedFileName').textContent = file.name + ' (' + fmtSize(file.size) + ')';
     document.getElementById('selectedFileName').style.display = '';
     document.getElementById('fileUploadZone').querySelector('.upload-placeholder').style.display = 'none';
     document.getElementById('fileUploadZone').classList.add('has-file');
@@ -536,17 +534,20 @@ function handleFileSelect(e) {
 }
 
 function uploadFile() {
-  if (!pendingFile) return;
+  if (!pendingFileData || !pendingFileName) return;
+  const id = 'fl_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  // Store file content in separate localStorage key
+  localStorage.setItem(FILE_PREFIX + id, pendingFileData);
+  // Store metadata
   files.push({
-    id: 'fl_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    id,
     folderId: currentFolderId,
-    name: pendingFile.name,
-    type: pendingFile.type,
-    size: pendingFile.size,
-    data: pendingFile.data,
+    name: pendingFileName,
+    type: pendingFileName.split('.').pop().toLowerCase(),
+    size: Math.round(pendingFileData.length * 0.75), // base64 → approximate binary size
     createdAt: Date.now()
   });
-  saveDraft();
+  saveMeta();
   renderItems();
   closeFileModal();
   showToast('文件已上传（草稿）');
@@ -555,44 +556,105 @@ function uploadFile() {
 function deleteFile(id) {
   if (!confirm('确定删除这个文件？')) return;
   files = files.filter(f => f.id !== id);
-  saveDraft();
+  localStorage.removeItem(FILE_PREFIX + id);
+  saveMeta();
   renderItems();
   showToast('文件已删除（草稿）');
 }
 
-// Download file from base64 data
 function downloadFile(id) {
+  // Try local draft first
+  const localData = localStorage.getItem(FILE_PREFIX + id);
+  if (localData) {
+    const f = files.find(x => x.id === id);
+    const a = document.createElement('a');
+    a.href = localData;
+    a.download = f ? f.name : 'file';
+    a.click();
+    return;
+  }
+  // Try inline data field (legacy format)
   const f = files.find(x => x.id === id);
-  if (!f || !f.data) return;
-  const a = document.createElement('a');
-  a.href = f.data;
-  a.download = f.name;
-  a.click();
+  if (f && f.data) {
+    const a = document.createElement('a');
+    a.href = f.data;
+    a.download = f.name;
+    a.click();
+    return;
+  }
+  // Try server files/ directory
+  if (f) {
+    const ext = f.name.split('.').pop();
+    const a = document.createElement('a');
+    a.href = 'files/' + f.id + '.' + ext;
+    a.download = f.name;
+    a.click();
+    return;
+  }
+  showToast('文件不存在');
 }
 
 // --- Export ---
 function exportData() {
-  const payload = { folders, files };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'data.json';
-  a.click();
-  URL.revokeObjectURL(url);
+  // 1. Save metadata JSON (no base64 data)
+  const metaOnly = files.map(({data, ...rest}) => rest);
+  const metaBlob = new Blob([JSON.stringify({folders, files: metaOnly}, null, 2)], {type:'application/json'});
+  const metaUrl = URL.createObjectURL(metaBlob);
+  const ma = document.createElement('a');
+  ma.href = metaUrl; ma.download = 'data.json'; ma.click();
+  URL.revokeObjectURL(metaUrl);
 
-  serverSnapshot = JSON.stringify(payload);
-  localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+  // 2. Save each file blob individually
+  let delay = 300;
+  const localIds = files.map(f => f.id).filter(id => !!localStorage.getItem(FILE_PREFIX + id));
+
+  if (localIds.length > 0) {
+    showToast('正在下载 data.json 和 ' + localIds.length + ' 个文件...');
+  }
+
+  localIds.forEach((id, i) => {
+    setTimeout(() => {
+      const f = files.find(x => x.id === id);
+      const data = localStorage.getItem(FILE_PREFIX + id);
+      if (data && f) {
+        const blob = dataURItoBlob(data);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        // Use id.ext for files/ directory compatibility
+        const ext = f.name.split('.').pop();
+        a.download = f.id + '.' + ext;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, delay * (i + 1));
+  });
+
+  // 3. Mark as published
+  serverSnapshot = JSON.stringify({folders, files});
+  localStorage.setItem(META_KEY, JSON.stringify({folders, files}));
   updateBanner();
   document.getElementById('publishSteps').classList.add('show');
-  showToast('data.json 已下载');
+
+  if (localIds.length === 0) {
+    showToast('data.json 已下载');
+  }
+}
+
+function dataURItoBlob(dataURI) {
+  const m = dataURI.match(/^data:(.*);base64,(.*)$/);
+  if (!m) return new Blob([dataURI]);
+  const bytes = atob(m[2]);
+  const arr = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+  return new Blob([arr], {type: m[1]});
 }
 
 // --- Utils ---
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
 }
 
 function showToast(msg) {
@@ -603,7 +665,7 @@ function showToast(msg) {
   t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// --- Modal close on overlay click ---
+// Modal close
 document.getElementById('folderModal').addEventListener('click', function(e) {
   if (e.target === this) closeFolderModal();
 });
@@ -614,7 +676,7 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeFolderModal(); closeFileModal(); }
 });
 
-// --- Init ---
+// Init
 (async function() {
   await loadData();
   renderItems();
