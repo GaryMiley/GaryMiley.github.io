@@ -168,6 +168,32 @@ footer {
   border-top: 1px solid var(--border);
 }
 
+/* Publish banner */
+.publish-banner {
+  display: none;
+  background: #fef3c7; border: 1px solid #f59e0b;
+  border-radius: var(--radius); padding: 16px 20px;
+  margin-bottom: 24px; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.publish-banner.show { display: flex; }
+.publish-banner .banner-text { font-size: .875rem; color: #92400e; font-weight: 500; }
+.publish-banner .banner-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.btn-warning { background: #f59e0b; color: #fff; }
+.btn-warning:hover { background: #d97706; }
+
+.publish-steps {
+  display: none; background: #f0fdf4; border: 1px solid #22c55e;
+  border-radius: var(--radius); padding: 20px; margin-bottom: 24px;
+}
+.publish-steps.show { display: block; }
+.publish-steps h4 { font-size: .95rem; color: #166534; margin-bottom: 12px; }
+.publish-steps ol { margin-left: 20px; color: #166534; font-size: .875rem; line-height: 2; }
+.publish-steps code {
+  background: #dcfce7; padding: 2px 6px; border-radius: 4px;
+  font-size: .825rem; color: #15803d;
+}
+
 /* Toast */
 .toast {
   position: fixed; bottom: 24px; right: 24px; z-index: 300;
@@ -203,7 +229,24 @@ footer {
 <section class="container" id="works">
   <div class="section-header">
     <h2>我的作品</h2>
-    <button class="btn btn-primary" onclick="openModal()">+ 添加作品</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" id="exportBtn" onclick="exportData()" style="display:none">导出 data.json</button>
+      <button class="btn btn-primary" onclick="openModal()">+ 添加作品</button>
+    </div>
+  </div>
+  <div class="publish-banner" id="publishBanner">
+    <span class="banner-text">你有未发布的修改，发布后其他人才能看到</span>
+    <div class="banner-actions">
+      <button class="btn btn-warning btn-sm" onclick="exportData()">导出 data.json</button>
+    </div>
+  </div>
+  <div class="publish-steps" id="publishSteps">
+    <h4>发布步骤</h4>
+    <ol>
+      <li>将下载的 <code>data.json</code> 放到 <code>C:\Users\31329\Desktop\test\</code> 目录，覆盖原文件</li>
+      <li>在终端运行：<code>cd C:\Users\31329\Desktop\test &amp;&amp; git add data.json &amp;&amp; git commit -m "update works" &amp;&amp; git push</code></li>
+      <li>等待 1-2 分钟，刷新网页即可看到更新</li>
+    </ol>
   </div>
   <div class="projects-grid" id="projectsGrid"></div>
 </section>
@@ -255,18 +298,63 @@ footer {
 <div class="toast" id="toast"></div>
 
 <script>
-const STORAGE_KEY = 'portfolio_projects';
+const DRAFT_KEY = 'portfolio_draft';
+const SNAPSHOT_KEY = 'portfolio_snapshot';
 let projects = [];
+let serverSnapshot = null;
 let editingId = null;
 let tempImageData = null;
 
-function loadProjects() {
-  try { projects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-  catch (e) { projects = []; }
+function isDirty() {
+  const draft = localStorage.getItem(DRAFT_KEY);
+  if (!draft) return false;
+  if (!serverSnapshot) return true;
+  return draft !== serverSnapshot;
 }
 
-function saveProjects() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+function updateBanner() {
+  const dirty = isDirty();
+  document.getElementById('publishBanner').classList.toggle('show', dirty);
+  document.getElementById('exportBtn').style.display = dirty ? '' : 'none';
+}
+
+async function loadProjects() {
+  let serverData = [];
+  // Try to fetch data.json from server
+  try {
+    const resp = await fetch('data.json?' + Date.now());
+    if (resp.ok) {
+      serverData = await resp.json();
+    }
+  } catch (e) {
+    // Fallback: use empty array
+  }
+
+  serverSnapshot = JSON.stringify(serverData);
+
+  // Check for local draft
+  const draft = localStorage.getItem(DRAFT_KEY);
+  if (draft) {
+    try {
+      projects = JSON.parse(draft);
+      // If draft matches server, clear it (already published)
+      if (draft === serverSnapshot) {
+        localStorage.removeItem(DRAFT_KEY);
+      }
+    } catch (e) {
+      projects = [...serverData];
+    }
+  } else {
+    projects = [...serverData];
+  }
+
+  renderProjects();
+  updateBanner();
+}
+
+function saveDraft() {
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(projects));
+  updateBanner();
 }
 
 function renderProjects() {
@@ -280,7 +368,7 @@ function renderProjects() {
       </div>`;
     return;
   }
-  grid.innerHTML = projects.map((p, i) => `
+  grid.innerHTML = projects.map((p) => `
     <div class="project-card">
       ${p.image
         ? `<img class="card-img" src="${p.image}" alt="${escapeHtml(p.title)}">`
@@ -288,7 +376,7 @@ function renderProjects() {
       <div class="card-body">
         <h3>${escapeHtml(p.title)}</h3>
         <p>${escapeHtml(p.desc)}</p>
-        ${p.tags.length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+        ${p.tags && p.tags.length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
         <div class="card-actions">
           <button class="btn btn-outline btn-sm" onclick="editProject('${p.id}')">编辑</button>
           <button class="btn btn-danger btn-sm" onclick="deleteProject('${p.id}')">删除</button>
@@ -315,7 +403,7 @@ function openModal(id) {
     if (p) {
       document.getElementById('projectTitle').value = p.title;
       document.getElementById('projectDesc').value = p.desc;
-      document.getElementById('projectTags').value = p.tags.join(', ');
+      document.getElementById('projectTags').value = (p.tags || []).join(', ');
       tempImageData = p.image || null;
       updateImagePreview();
     }
@@ -338,6 +426,11 @@ function closeModal() {
 function handleImageSelect(e) {
   const file = e.target.files[0];
   if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('图片太大了，请控制在 5MB 以内');
+    e.target.value = '';
+    return;
+  }
   const reader = new FileReader();
   reader.onload = function(ev) {
     tempImageData = ev.target.result;
@@ -398,10 +491,10 @@ function saveProject() {
     });
   }
 
-  saveProjects();
+  saveDraft();
   renderProjects();
   closeModal();
-  showToast(editingId ? '作品已更新' : '作品已添加');
+  showToast(editingId ? '作品已更新（草稿）' : '作品已添加（草稿）');
 }
 
 function editProject(id) {
@@ -411,9 +504,27 @@ function editProject(id) {
 function deleteProject(id) {
   if (!confirm('确定要删除这个作品吗？')) return;
   projects = projects.filter(p => p.id !== id);
-  saveProjects();
+  saveDraft();
   renderProjects();
-  showToast('作品已删除');
+  showToast('作品已删除（草稿）');
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(projects, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Update snapshot so banner hides
+  serverSnapshot = JSON.stringify(projects);
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(projects));
+  updateBanner();
+
+  document.getElementById('publishSteps').classList.add('show');
+  showToast('data.json 已下载，请按步骤发布');
 }
 
 function showToast(msg) {
@@ -421,7 +532,7 @@ function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
   clearTimeout(toast._timeout);
-  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2000);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
@@ -434,7 +545,6 @@ document.addEventListener('keydown', function(e) {
 
 // Init
 loadProjects();
-renderProjects();
 </script>
 
 </body>
