@@ -584,9 +584,8 @@ function downloadFile(id) {
   }
   // Try server files/ directory
   if (f) {
-    const ext = f.name.split('.').pop();
     const a = document.createElement('a');
-    a.href = 'files/' + f.id + '.' + ext;
+    a.href = 'files/' + encodeURIComponent(f.id + '_' + f.name);
     a.download = f.name;
     a.click();
     return;
@@ -621,9 +620,8 @@ function exportData() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        // Use id.ext for files/ directory compatibility
-        const ext = f.name.split('.').pop();
-        a.download = f.id + '.' + ext;
+        // id_name for readable files/ directory
+        a.download = f.id + '_' + f.name;
         a.click();
         URL.revokeObjectURL(url);
       }
