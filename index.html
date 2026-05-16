@@ -558,11 +558,17 @@ function handleFileSelect(e) {
 // --- Body-level drag & drop (upload files directly) ---
 let bodyDragCounter = 0;
 
+function isFileDrag(e) {
+  return e.dataTransfer.types && e.dataTransfer.types.includes('Files');
+}
+
 function bodyDragOver(e) {
+  if (!isFileDrag(e)) return;
   e.preventDefault();
 }
 
 function bodyDragEnter(e) {
+  if (!isFileDrag(e)) return;
   e.preventDefault();
   bodyDragCounter++;
   if (bodyDragCounter === 1 && !document.getElementById('fileModal').classList.contains('active')) {
@@ -571,6 +577,7 @@ function bodyDragEnter(e) {
 }
 
 function bodyDragLeave(e) {
+  if (!isFileDrag(e)) return;
   e.preventDefault();
   bodyDragCounter--;
   if (bodyDragCounter <= 0) {
@@ -580,10 +587,10 @@ function bodyDragLeave(e) {
 }
 
 function bodyDrop(e) {
+  if (!isFileDrag(e)) return;
   e.preventDefault();
   bodyDragCounter = 0;
   document.getElementById('dropOverlay').classList.remove('active');
-  // If the upload modal is open, let its handler deal with the drop
   if (document.getElementById('fileModal').classList.contains('active')) return;
   const fl = e.dataTransfer.files;
   if (!fl.length) return;
