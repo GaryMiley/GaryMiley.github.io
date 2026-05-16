@@ -40,7 +40,15 @@ for name in os.listdir(FILES_DIR):
         added += 1
         print(f'  added: {name}')
 
-# 2. Remove files in files/ that aren't in data.json
+# 2. Remove data.json entries for files that no longer exist on disk
+deleted_entries = 0
+for f in list(data['files']):
+    if not os.path.exists(os.path.join(FILES_DIR, f['name'])):
+        data['files'].remove(f)
+        deleted_entries += 1
+        print(f'  removed from index: {f[\"name\"]}')
+
+# 3. Remove files in files/ that aren't in data.json
 expected = set(f['name'] for f in data['files'])
 existing = set(os.listdir(FILES_DIR))
 removed = 0
@@ -59,8 +67,9 @@ with open(os.path.join(BASE, 'data.json'), 'w', encoding='utf-8') as f:
 # Report
 missing = expected - set(os.listdir(FILES_DIR))
 if added:   print(f'Added {added} file(s).')
-if removed: print(f'Cleaned up {removed} file(s).')
-if not added and not removed and not missing:
+if deleted_entries: print(f'Removed {deleted_entries} file(s) from index.')
+if removed: print(f'Cleaned up {removed} file(s) from disk.')
+if not added and not removed and not deleted_entries and not missing:
     print('Already in sync.')
 
 print(f'Total: {len(data["files"])} file(s) in data.json')
