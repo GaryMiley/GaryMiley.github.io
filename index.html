@@ -108,6 +108,8 @@ nav .nav-links a:hover { color: var(--text); }
   display: flex; gap: 3px; opacity: 0; transition: opacity .15s;
 }
 .item-card:hover .item-actions { opacity: 1; }
+.item-card.dragging { opacity: .35; }
+.item-card.drop-target { border-color: var(--accent); background: #eff6ff; box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
 
 .empty-state {
   grid-column: 1/-1; text-align: center; padding: 44px 16px; color: var(--text-secondary);
@@ -163,6 +165,7 @@ nav .nav-links a:hover { color: var(--text); }
 .file-upload-zone:hover { border-color: var(--accent); background: #fafbff; }
 .file-upload-zone .upload-icon { font-size: 1.75rem; margin-bottom: 4px; }
 .file-upload-zone .upload-text { font-size: .78rem; color: var(--text-secondary); }
+.file-upload-zone.drag-over { border-color: var(--accent); background: #eff6ff; }
 .file-upload-zone.has-file { border-style: solid; border-color: #22c55e; background: #f0fdf4; }
 .file-upload-zone .file-name { font-size: .82rem; color: #15803d; font-weight: 500; }
 .file-upload-zone input[type="file"] { display: none; }
@@ -177,6 +180,19 @@ nav .nav-links a:hover { color: var(--text); }
 }
 .toast.show { transform: translateY(0); opacity: 1; }
 
+.drop-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(37,99,235,.12); backdrop-filter: blur(2px);
+  align-items: center; justify-content: center; pointer-events: none;
+}
+.drop-overlay.active { display: flex; }
+.drop-message {
+  background: var(--card-bg); border: 3px dashed var(--accent); border-radius: 16px;
+  padding: 40px 60px; text-align: center; font-size: 1.1rem; font-weight: 600;
+  color: var(--accent); box-shadow: 0 8px 32px rgba(37,99,235,.15);
+}
+.drop-message .drop-icon { font-size: 3rem; margin-bottom: 8px; }
+
 .total-size { font-size: .75rem; color: var(--text-secondary); margin-bottom: 12px; }
 .total-size.warn { color: #f59e0b; font-weight: 500; }
 .total-size.danger { color: #ef4444; font-weight: 500; }
@@ -187,7 +203,15 @@ nav .nav-links a:hover { color: var(--text); }
 }
 </style>
 </head>
-<body>
+<body ondragover="bodyDragOver(event)" ondragenter="bodyDragEnter(event)"
+      ondragleave="bodyDragLeave(event)" ondrop="bodyDrop(event)">
+
+<div class="drop-overlay" id="dropOverlay">
+  <div class="drop-message">
+    <div class="drop-icon">📥</div>
+    <div>释放文件以上传</div>
+  </div>
+</div>
 
 <nav>
   <a href="#" class="logo">czg</a>
@@ -226,7 +250,9 @@ nav .nav-links a:hover { color: var(--text); }
     </ol>
   </div>
 
-  <div class="items-grid" id="itemsGrid"></div>
+  <div class="items-grid" id="itemsGrid"
+       ondragover="folderDragOver(event)" ondragleave="folderDragLeave(event)"
+       ondrop="gridDrop(event)"></div>
 </section>
 
 <!-- New Folder Modal -->
@@ -250,7 +276,10 @@ nav .nav-links a:hover { color: var(--text); }
     <h3>上传文件</h3>
     <div class="form-group">
       <label>选择文件（可多选，单文件 ≤ 20MB）</label>
-      <div class="file-upload-zone" id="fileUploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="file-upload-zone" id="fileUploadZone"
+           onclick="document.getElementById('fileInput').click()"
+           ondragover="dragOver(event)" ondragenter="dragEnter(event)"
+           ondragleave="dragLeave(event)" ondrop="dropFile(event)">
         <div class="upload-placeholder">
           <div class="upload-icon">📤</div>
           <div class="upload-text">点击选择文件（可多选）</div>
@@ -414,8 +443,11 @@ function renderBreadcrumb() {
   }
   bc.innerHTML = trail.map((t,i) =>
     i < trail.length-1
-      ? `<a onclick="navigateTo(${t.id?"'"+t.id+"'":"null"})">${esc(t.name)}</a><span>/</span>`
-      : `<span>${esc(t.name)}</span>`
+      ? `<a onclick="navigateTo(${t.id?"'"+t.id+"'":"null"})"
+           ondragover="folderDragOver(event)" ondragleave="folderDragLeave(event)"
+           ondrop="folderDrop(event, '${t.id || ''}')">${esc(t.name)}</a><span>/</span>`
+      : `<span ondragover="folderDragOver(event)" ondragleave="folderDragLeave(event)"
+           ondrop="folderDrop(event, '${t.id || ''}')">${esc(t.name)}</span>`
   ).join('');
 }
 
@@ -437,8 +469,10 @@ function renderItems() {
 
   subFolders.forEach(f => {
     const count = files.filter(x => x.folderId === f.id).length;
-    html += `<div class="item-card" onclick="navigateTo('${f.id}')">
-      <div class="item-actions"><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFolder('${f.id}')">✕</button></div>
+    html += `<div class="item-card"
+      ondragover="folderDragOver(event)" ondragleave="folderDragLeave(event)"
+      ondrop="folderDrop(event, '${f.id}')" onclick="navigateTo('${f.id}')">
+      <div class="item-actions"><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFolder('${f.id}')" draggable="false">✕</button></div>
       <div class="item-icon">📁</div>
       <div class="item-name">${esc(f.name)}</div>
       <div class="item-meta">${count} 个文件</div>
@@ -448,8 +482,10 @@ function renderItems() {
   subFiles.forEach(f => {
     const info = getFileInfo(f.name);
     const hasLocal = !!localStorage.getItem(FILE_PREFIX + f.id);
-    html += `<div class="item-card" onclick="downloadFile('${f.id}')">
-      <div class="item-actions"><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFile('${f.id}')">✕</button></div>
+    html += `<div class="item-card" draggable="true"
+      ondragstart="dragFileStart(event, '${f.id}')" ondragend="dragFileEnd(event)"
+      onclick="downloadFile('${f.id}')">
+      <div class="item-actions"><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteFile('${f.id}')" draggable="false">✕</button></div>
       <div class="item-icon">${info.icon}</div>
       <div class="item-name">${esc(f.name)}</div>
       <div class="item-meta">${fmtSize(f.size)}${hasLocal ? ' · 草稿' : ''}</div>
@@ -515,13 +551,163 @@ function openUploadFile() {
 function closeFileModal() { document.getElementById('fileModal').classList.remove('active'); pendingFiles = []; }
 
 function handleFileSelect(e) {
-  const selected = Array.from(e.target.files);
+  processFiles(e.target.files);
+  e.target.value = '';
+}
+
+// --- Body-level drag & drop (upload files directly) ---
+let bodyDragCounter = 0;
+
+function bodyDragOver(e) {
+  e.preventDefault();
+}
+
+function bodyDragEnter(e) {
+  e.preventDefault();
+  bodyDragCounter++;
+  if (bodyDragCounter === 1 && !document.getElementById('fileModal').classList.contains('active')) {
+    document.getElementById('dropOverlay').classList.add('active');
+  }
+}
+
+function bodyDragLeave(e) {
+  e.preventDefault();
+  bodyDragCounter--;
+  if (bodyDragCounter <= 0) {
+    bodyDragCounter = 0;
+    document.getElementById('dropOverlay').classList.remove('active');
+  }
+}
+
+function bodyDrop(e) {
+  e.preventDefault();
+  bodyDragCounter = 0;
+  document.getElementById('dropOverlay').classList.remove('active');
+  // If the upload modal is open, let its handler deal with the drop
+  if (document.getElementById('fileModal').classList.contains('active')) return;
+  const fl = e.dataTransfer.files;
+  if (!fl.length) return;
+  uploadFilesDirectly(fl);
+}
+
+function uploadFilesDirectly(fileList) {
+  const selected = Array.from(fileList);
+  const tooBig = selected.filter(f => f.size > 20 * 1024 * 1024);
+  if (tooBig.length) {
+    showToast(tooBig.length + ' 个文件超过 20MB 限制：' + tooBig.map(f=>f.name).join(', '));
+    return;
+  }
+  let loaded = 0;
+  selected.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const data = ev.target.result;
+      const id = 'fl_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      localStorage.setItem(FILE_PREFIX + id, data);
+      files.push({
+        id,
+        folderId: currentFolderId,
+        name: file.name,
+        type: file.name.split('.').pop().toLowerCase(),
+        size: Math.round(data.length * 0.75),
+        createdAt: Date.now()
+      });
+      loaded++;
+      if (loaded === selected.length) {
+        saveMeta();
+        renderItems();
+        showToast(loaded + ' 个文件已上传（草稿）');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// --- File-to-folder drag & drop ---
+function dragFileStart(e, fileId) {
+  e.dataTransfer.setData('text/plain', fileId);
+  e.dataTransfer.effectAllowed = 'move';
+  const card = e.target.closest('.item-card');
+  if (card) setTimeout(() => card.classList.add('dragging'), 0);
+}
+
+function dragFileEnd(e) {
+  const card = e.target.closest('.item-card');
+  if (card) card.classList.remove('dragging');
+  document.querySelectorAll('.item-card.drop-target').forEach(el => el.classList.remove('drop-target'));
+}
+
+function folderDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const card = e.target.closest('.item-card');
+  if (card) card.classList.add('drop-target');
+  else if (e.target.closest('#breadcrumb')) {
+    e.target.classList.add('drop-target');
+  }
+}
+
+function folderDragLeave(e) {
+  const card = e.target.closest('.item-card');
+  if (card) card.classList.remove('drop-target');
+}
+
+function folderDrop(e, folderId) {
+  e.preventDefault();
+  e.stopPropagation();
+  // Remove highlight
+  document.querySelectorAll('.item-card.drop-target').forEach(el => el.classList.remove('drop-target'));
+  const fileId = e.dataTransfer.getData('text/plain');
+  if (!fileId) return;
+  const f = files.find(x => x.id === fileId);
+  if (!f) return;
+  f.folderId = folderId || null;
+  saveMeta();
+  renderItems();
+  showToast('文件已移动（草稿）');
+}
+
+function gridDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.querySelectorAll('.item-card.drop-target').forEach(el => el.classList.remove('drop-target'));
+  const fileId = e.dataTransfer.getData('text/plain');
+  if (!fileId) return;
+  const f = files.find(x => x.id === fileId);
+  if (!f) return;
+  f.folderId = currentFolderId || null;
+  saveMeta();
+  renderItems();
+  showToast('文件已移动到当前文件夹（草稿）');
+}
+
+// --- Modal-level drag ---
+function dragOver(e) { e.preventDefault(); }
+
+function dragEnter(e) {
+  e.preventDefault();
+  document.getElementById('fileUploadZone').classList.add('drag-over');
+}
+
+function dragLeave(e) {
+  e.preventDefault();
+  document.getElementById('fileUploadZone').classList.remove('drag-over');
+}
+
+function dropFile(e) {
+  e.preventDefault();
+  document.getElementById('fileUploadZone').classList.remove('drag-over');
+  processFiles(e.dataTransfer.files);
+}
+
+function processFiles(fileList) {
+  const selected = Array.from(fileList);
   if (!selected.length) return;
   // Check sizes
   const tooBig = selected.filter(f => f.size > 20 * 1024 * 1024);
   if (tooBig.length) {
     showToast(tooBig.length + ' 个文件超过 20MB 限制：' + tooBig.map(f=>f.name).join(', '));
-    e.target.value = ''; return;
+    return;
   }
   // Read all files
   pendingFiles = [];
