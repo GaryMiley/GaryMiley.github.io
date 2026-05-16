@@ -219,8 +219,8 @@ nav .nav-links a:hover { color: var(--text); }
   <div class="publish-steps" id="publishSteps">
     <h4>发布步骤</h4>
     <ol>
-      <li>把下载的所有文件放到项目目录（<code>data.json</code> 放根目录，其余文件放到 <code>files/</code> 文件夹）</li>
-      <li>终端运行：<code>git add -A && git commit -m "update" && git push</code></li>
+      <li>把下载的 <code>data.json</code> 放到项目根目录，其余文件放到 <code>files/</code></li>
+      <li>终端运行：<code>python sync.py && git add -A && git commit -m "update" && git push</code></li>
       <li>等 1-2 分钟刷新网页</li>
     </ol>
   </div>
