@@ -52,6 +52,126 @@
       "type": "pdf",
       "size": 973195,
       "createdAt": 1778923997755
+    },
+    {
+      "id": "fl_19e30456614p8m4",
+      "folderId": null,
+      "name": "ch04.pdf",
+      "type": "pdf",
+      "size": 2667128,
+      "createdAt": 1778926315028
+    },
+    {
+      "id": "fl_19e30456615ulsq",
+      "folderId": null,
+      "name": "ch04.pptx",
+      "type": "pptx",
+      "size": 3740429,
+      "createdAt": 1778926315029
+    },
+    {
+      "id": "fl_19e30456615z5h1",
+      "folderId": null,
+      "name": "ch05.pdf",
+      "type": "pdf",
+      "size": 5292084,
+      "createdAt": 1778926315029
+    },
+    {
+      "id": "fl_19e304566157px5",
+      "folderId": null,
+      "name": "ch06.pdf",
+      "type": "pdf",
+      "size": 3676656,
+      "createdAt": 1778926315029
+    },
+    {
+      "id": "fl_19e30456615n2d1",
+      "folderId": null,
+      "name": "ch07.pdf",
+      "type": "pdf",
+      "size": 3690511,
+      "createdAt": 1778926315029
+    },
+    {
+      "id": "fl_19e304566152ma8",
+      "folderId": null,
+      "name": "ch08.pdf",
+      "type": "pdf",
+      "size": 3536910,
+      "createdAt": 1778926315029
+    },
+    {
+      "id": "fl_19e30456615s3tp",
+      "folderId": null,
+      "name": "ch09.pdf",
+      "type": "pdf",
+      "size": 5447504,
+      "createdAt": 1778926315029
+    },
+    {
+      "id": "fl_19e30456615ef7j",
+      "folderId": null,
+      "name": "ch10-k近邻学习.pdf",
+      "type": "pdf",
+      "size": 726910,
+      "createdAt": 1778926315029
+    },
+    {
+      "id": "fl_19e30456616y4dp",
+      "folderId": null,
+      "name": "ch10-PCA.pdf",
+      "type": "pdf",
+      "size": 1416311,
+      "createdAt": 1778926315030
+    },
+    {
+      "id": "fl_19e30456616d2cf",
+      "folderId": null,
+      "name": "ch10-流形学习.pdf",
+      "type": "pdf",
+      "size": 1003580,
+      "createdAt": 1778926315030
+    },
+    {
+      "id": "fl_19e3045661681ou",
+      "folderId": null,
+      "name": "ch11-字典学习.pdf",
+      "type": "pdf",
+      "size": 1112035,
+      "createdAt": 1778926315030
+    },
+    {
+      "id": "fl_19e30456616ut8a",
+      "folderId": null,
+      "name": "ch11.pdf",
+      "type": "pdf",
+      "size": 2785587,
+      "createdAt": 1778926315030
+    },
+    {
+      "id": "fl_19e30456616i75t",
+      "folderId": null,
+      "name": "Lecture0.pdf",
+      "type": "pdf",
+      "size": 16608037,
+      "createdAt": 1778926315030
+    },
+    {
+      "id": "fl_19e30456616icwf",
+      "folderId": null,
+      "name": "Lecture1.pdf",
+      "type": "pdf",
+      "size": 4469389,
+      "createdAt": 1778926315030
+    },
+    {
+      "id": "fl_19e30456616f2xx",
+      "folderId": null,
+      "name": "Lecture3-拉格朗日乘子与KKT条件.pdf",
+      "type": "pdf",
+      "size": 1351977,
+      "createdAt": 1778926315030
     }
   ]
 }

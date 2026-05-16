@@ -46,7 +46,7 @@ for f in list(data['files']):
     if not os.path.exists(os.path.join(FILES_DIR, f['name'])):
         data['files'].remove(f)
         deleted_entries += 1
-        print(f'  removed from index: {f[\"name\"]}')
+        print(f'  removed from index: {f["name"]}')
 
 # 3. Remove files in files/ that aren't in data.json
 expected = set(f['name'] for f in data['files'])
